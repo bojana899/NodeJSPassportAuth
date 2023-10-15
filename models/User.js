@@ -28,7 +28,20 @@ export const createUser = (newUser, callback) => {
 
 export const getUserByEmail = (email, callback) => {
   let Obj = {email: email}
-  User.findOne(Obj, callback);
+  User.findOne({ Obj, callback }).then(result => {
+	if (result) {
+		// Document was found, result contains the document
+		console.log("Document found:", result);
+	  } else {
+		// Document was not found
+		console.log("No document found.");
+	  }
+	})
+	.catch(error => {
+	  // Handle any errors here
+	  console.error("Error:", error);
+  });
+  
 }
 
 export const comparePassword = (password, hash, callback) => {

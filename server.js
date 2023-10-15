@@ -12,11 +12,12 @@ import mongoose from 'mongoose';
 import index from './routes/index';
 import users from './routes/users';
 
+
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/CRMDB', {
+mongoose.connect('mongodb://localhost:27017/?readPreference=primary&ssl=false&directConnection=true', {
 	useMongoClient: true
 });
-let db = mongoose.connect;
+let db = mongoose.connection;
 
 const app = express();
 const PORT = 3000;
@@ -54,6 +55,21 @@ app.use(function(req, res, next){
 app.use('/', index);
 app.use('/users', users);
 
+
+
 app.listen(PORT, function(){
 	console.log('Server is running on',PORT);
+});
+
+const dbURI = 'mongodb://localhost:27017/?readPreference=primary&ssl=false&directConnection=true';
+
+mongoose.connect(dbURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('Connected to MongoDB Atlas');
 });
