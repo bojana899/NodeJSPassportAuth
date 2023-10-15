@@ -5,13 +5,11 @@ router.get('/', isLoggedIn, function(req, res){
   	res.render('pages/index');
 });
 
-function isLoggedIn(req, res, next){
-	if(req.isAuthenticated()){
-        next();
+function isLoggedIn(req, res, next) {
+	if (req.isAuthenticated()) {
+	   return next();
 	}
-	else{
-        res.redirect("/users/login");
-    }
-}
+	res.redirect('/users/login');
+   }
 
 export default router;

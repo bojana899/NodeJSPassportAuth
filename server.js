@@ -11,6 +11,25 @@ const LocalStrategy = require('passport-local').Strategy;
 import mongoose from 'mongoose';
 import index from './routes/index';
 import users from './routes/users';
+const { MongoClient } = require('mongodb');
+
+async function main() {
+ const uri = "mongodb://localhost:27017/?readPreference=primary&ssl=false&directConnection=true";
+ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+ try {
+    await client.connect();
+    const collection = client.db("test").collection("documents");
+    const documents = await collection.find({}).toArray();
+    console.log(documents);
+ } catch (err) {
+    console.error(err);
+ } finally {
+    await client.close();
+ }
+}
+
+main().catch(console.error);
 
 
 mongoose.Promise = global.Promise;
